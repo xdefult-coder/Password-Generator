@@ -19,3 +19,77 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## **Complete CLI Tool** (`src/cli.py`)
+
+```python
+#!/usr/bin/env python3
+"""
+CLI interface for PasswordListGenerator
+"""
+
+import argparse
+import sys
+from .generator import PasswordListGenerator
+from .utils import save_wordlist, analyze_wordlist, load_keywords, load_names
+
+def main():
+    parser = argparse.ArgumentParser(description='Generate password wordlists')
+    
+    parser.add_argument('-o', '--output', default='password_list.txt',
+                       help='Output filename')
+    parser.add_argument('-c', '--count', type=int, default=1000,
+                       help='Total number of passwords to generate')
+    parser.add_argument('--format', choices=['txt', 'json'], default='txt',
+                       help='Output format')
+    
+    # Generation options
+    parser.add_argument('--keywords', nargs='+', help='Keywords for password generation')
+    parser.add_argument('--names', nargs='+', help='Names for password generation')
+    parser.add_argument('--level', choices=['beginner', 'intermediate', 'advanced', 'all'],
+                       default='all', help='Password complexity level')
+    
+    # File inputs
+    parser.add_argument('--keywords-file', help='File containing keywords')
+    parser.add_argument('--names-file', help='File containing names')
+    
+    args = parser.parse_args()
+    
+    # Load data from files if provided
+    keywords = args.keywords or []
+    names = args.names or []
+    
+    if args.keywords_file:
+        keywords.extend(load_keywords(args.keywords_file))
+    
+    if args.names_file:
+        names.extend(load_names(args.names_file))
+    
+    # Initialize generator
+    generator = PasswordListGenerator()
+    
+    # Generate based on level
+    if args.level == 'all':
+        passwords = generator.generate_comprehensive_list(
+            keywords=keywords if keywords else None,
+            names=names if names else None,
+            total_count=args.count
+        )
+    elif args.level == 'beginner':
+        passwords = generator.generate_beginner_passwords(args.count)
+    elif args.level == 'intermediate':
+        passwords = generator.generate_intermediate_passwords(keywords, args.count)
+    elif args.level == 'advanced':
+        passwords = generator.generate_advanced_passwords(keywords, args.count)
+    
+    # Save output
+    save_wordlist(passwords, args.output, args.format)
+    
+    # Show analysis
+    analysis = analyze_wordlist(passwords)
+    print(f"✓ Generated {analysis['total_passwords']} passwords")
+    print(f"✓ Saved to {args.output}")
+    print(f"✓ Average entropy: {analysis['entropy_stats']['avg']}")
+
+if __name__ == "__main__":
+    main()
