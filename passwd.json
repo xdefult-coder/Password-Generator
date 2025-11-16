@@ -1,0 +1,12 @@
+{
+  "metadata": {
+    "total_passwords": 1000,
+    "generated_at": "2024-01-01 12:00:00",
+    "wordlist_name": "my_wordlist"
+  },
+  "passwords": [
+    "password123",
+    "admin2024",
+    "D!pt!P@l"
+  ]
+}
