@@ -421,10 +421,10 @@ def basic_example():
     generator = PasswordListGenerator()
     utils = PasswordUtils()
     
-    names = ['dipti', 'pal', 'diptipal']
+    names = ['Hamdan', 'pal', 'Hamdan']
     keywords = ['admin', 'user', 'secure', 'password']
     
-    Banner.show_generation_banner("Dipti_Pal_Wordlist", 1000)
+    Banner.show_generation_banner("Hamdan_Pal_Wordlist", 1000)
     Banner.show_level_banner('all')
     
     passwords = generator.generate_comprehensive_list(
@@ -433,10 +433,10 @@ def basic_example():
         total_count=1000
     )
     
-    utils.save_wordlist(passwords, 'dipti_password_list.txt')
+    utils.save_wordlist(passwords, 'hamdan_password_list.txt')
     
     analysis = utils.analyze_wordlist(passwords)
-    Banner.show_completion_banner('dipti_password_list.txt', len(passwords), analysis)
+    Banner.show_completion_banner('hamdan_password_list.txt', len(passwords), analysis)
     
     print("\n📋 Sample passwords (first 20):")
     print("-" * 40)
@@ -461,13 +461,13 @@ def advanced_example():
         '{word}!QAZ2wsx'
     ]
     
-    base_words = ['dipti', 'pal', 'admin', 'user']
+    base_words = ['hamdan', 'passwd', 'admin', 'user']
     
     Banner.show_generation_banner("Custom_Pattern_Wordlist", 300)
     
     custom_passwords = generator.generate_custom_pattern(base_words, custom_patterns)
     beginner = generator.generate_beginner_passwords(50)
-    advanced = generator.generate_advanced_passwords(['dipti', 'pal'], 100)
+    advanced = generator.generate_advanced_passwords(['Hamdan', '11'], 100)
     
     all_passwords = list(dict.fromkeys(beginner + advanced + custom_passwords))
     
